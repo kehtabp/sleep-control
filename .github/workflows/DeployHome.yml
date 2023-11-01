@@ -35,3 +35,5 @@ jobs:
       - run: sudo ip link set up dev wg0
 
       - run: curl ifconfig.me
+
+      - run: curl 192.168.1.254
