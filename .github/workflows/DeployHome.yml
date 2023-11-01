@@ -36,4 +36,4 @@ jobs:
 
       - run: curl ifconfig.me
 
-      - run: curl 192.168.1.254
+      - run: sudo ip link
