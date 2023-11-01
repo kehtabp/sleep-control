@@ -27,7 +27,7 @@ jobs:
 
       - run: sudo ip link add dev wg0 type wireguard
 
-      - run: sudo ip address add dev wg0 ${{ secrets.IPS }}
+      - run: sudo ip address add dev wg0  ${{ secrets.IPS }}  peer 10.13.13.1
     
 
       - run: sudo wg set wg0 listen-port ${{ secrets.PORT }} private-key privatekey peer ${{ secrets.ENDPOINT_PUBLIC}} allowed-ips 0.0.0.0/0 endpoint ${{ secrets.ENDPOINT }}
