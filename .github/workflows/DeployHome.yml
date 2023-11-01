@@ -38,5 +38,5 @@ jobs:
       - run: sudo ip link
 
       - run: sudo wg
-      
-      - run: wg showconf wg0
+
+      - run: sudo wg showconf wg0
