@@ -32,3 +32,6 @@ jobs:
           ips: '${{ secrets.IPS }}'
           allowed_ips: '${{ secrets.ALLOWED_IPS }}'
           private_key: '${{ secrets.PRIVATE }}'
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: curl ifconfig.me
