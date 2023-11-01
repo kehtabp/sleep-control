@@ -32,4 +32,3 @@ jobs:
           ips: '${{ secrets.IPS }}'
           allowed_ips: '${{ secrets.ALLOWED_IPS }}'
           private_key: '${{ secrets.PRIVATE }}'
-          preshared_key: '${{ secrets.PRESHARED }}'
