@@ -23,13 +23,13 @@ jobs:
     steps:
       - run: sudo apt install wireguard
 
-      - run: echo "${{ secrets.PRIVATE }}" > privatekey
+      - run: echo "${{ secrets.PRIVATE }}" > ./privatekey
 
       - run: sudo ip link add dev wg0 type wireguard
 
       - run: sudo ip address add dev wg0 10.13.13.2 peer 10.13.13.1
 
-      - run: sudo wg set wg0 listen-port ${{ vars.PORT }} private-key privatekey peer ${{ vars.PUBLIC_CERT }} allowed-ips ${{ vars.ALLOWED_IPS }} endpoint ${{ secrets.ENDPOINT }}
+      - run: sudo wg set wg0 listen-port ${{ vars.PORT }} private-key ./privatekey peer ${{ vars.PUBLIC_CERT }} allowed-ips ${{ vars.ALLOWED_IPS }} endpoint ${{ secrets.ENDPOINT }}
 
       - run: sudo ip link set up dev wg0
 
