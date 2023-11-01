@@ -39,4 +39,4 @@ jobs:
       - run: sudo ip link
 
       - run: sudo wg
-      - run: wg showconf
+      - run: wg showconf wg0
