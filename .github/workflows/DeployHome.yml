@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Create directory
         run: mkdir -p ${{ vars.DESTINATION }}
-      - name: export vars
+      - name: export vars 
         run: | 
           echo "export IDLE_COUNT_FILE=${{ vars.IDLE_COUNT_FILE }}" > ${{ vars.ENV_PATH }}
           echo "export INHIBIT=${{ vars.INHIBIT }}" >> ${{ vars.ENV_PATH }}
