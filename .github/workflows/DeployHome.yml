@@ -19,6 +19,8 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Create directory
+        run: mkdir -p ${{ vars.DESTINATION }}
       - name: export vars
         run: | 
           echo "export IDLE_COUNT_FILE=${{ vars.IDLE_COUNT_FILE }}" > ${{ vars.ENV_PATH }}
@@ -27,6 +29,7 @@ jobs:
           echo "export PLEX_URL=${{ vars.PLEX_URL }}" >> ${{ vars.ENV_PATH }}
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          path: /home/kewko/standby-monitor
+      - name: Copy 
+        run: |
+          cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}
 
