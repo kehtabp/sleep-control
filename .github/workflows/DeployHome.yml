@@ -27,11 +27,10 @@ jobs:
           echo "export INHIBIT_URL=${{ vars.INHIBIT_URL }}" >> ${{ vars.ENV_PATH }}
           echo "export PING_DOMAIN=${{ vars.PING_DOMAIN }}" >> ${{ vars.ENV_PATH }}
           echo "export PLEX_URL=${{ secrets.PLEX_URL }}" >> ${{ vars.ENV_PATH }}
-          echo "export QB_URL=${{ secrets.QB_URL }}" >> ${{ vars.ENV_PATH }}"
+          echo "export QB_URL=${{ secrets.QB_URL }}" >> ${{ vars.ENV_PATH }}
 
       - name: Checkout
         uses: actions/checkout@v3
       - name: Copy 
         run: |
           cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}
-
