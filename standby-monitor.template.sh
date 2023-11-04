@@ -1,4 +1,5 @@
 #!/bin/bash
+source /home/kewko/standby-monitor/.env
 idle_count_file=$IDLE_COUNT_FILE
 domain=$PING_DOMAIN
 ping $domain -c2 &> /dev/null
