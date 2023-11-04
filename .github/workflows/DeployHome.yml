@@ -34,5 +34,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Copy 
-        run: |
-          cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}
+        run: cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}

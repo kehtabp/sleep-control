@@ -55,7 +55,7 @@ check_plex_activity() {
 }
 
 check_qbittorrent_downloads() {
-	local active_downloads=$(curl -sf "http://${QB_URL}:${QB_WEBUI_PORT}/api/v2/torrents/info?filter=downloading" | jq -e -r '.[] | select(.dlspeed < 500) | .hash')
+	local active_downloads=$(curl -sf "http://${QB_URL}:${QB_PORT}/api/v2/torrents/info?filter=downloading" | jq -e -r '.[] | select(.dlspeed < 500) | .hash')
 	if [[ -n "$active_downloads" ]]; then
 		printf 'Sleep inhibited by active downloads in qBittorrent with download speed less than 500kb/s\n' | logger -t standby-monitor -s
 		rm "$IDLE_COUNT_FILE" 2> /dev/null || true
