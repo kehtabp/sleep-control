@@ -26,7 +26,9 @@ jobs:
           echo "export IDLE_COUNT_FILE=${{ vars.IDLE_COUNT_FILE }}" > ${{ vars.ENV_PATH }}
           echo "export INHIBIT_URL=${{ vars.INHIBIT_URL }}" >> ${{ vars.ENV_PATH }}
           echo "export PING_DOMAIN=${{ vars.PING_DOMAIN }}" >> ${{ vars.ENV_PATH }}
-          echo "export PLEX_URL=${{ vars.PLEX_URL }}" >> ${{ vars.ENV_PATH }}
+          echo "export PLEX_URL=${{ secrets.PLEX_URL }}" >> ${{ vars.ENV_PATH }}
+          echo "export QB_URL=${{ secrets.QB_URL }}" >> ${{ vars.ENV_PATH }}"
+
       - name: Checkout
         uses: actions/checkout@v3
       - name: Copy 
