@@ -1,4 +1,4 @@
-name: CI
+name: Deploy Home
 
 # Controls when the workflow will run
 on:
@@ -13,30 +13,20 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   deploy:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: home
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - run: sudo apt install wireguard
+      - name: export vars
+        run: | 
+          export IDLE_COUNT_FILE=${{ IDLE_COUNT_FILE }}
+          export INHIBIT_URL=${{ INHIBIT_URL }}
+          export PING_DOMAIN=${{ PING_DOMAIN }}
+          export PLEX_URL=${{ PLEX_URL }}
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: /home/kewko/standby-monitor
 
-      - run: echo "${{ secrets.PRIVATE }}" > ./privatekey
-
-      - run: sudo ip link add dev wg0 type wireguard
-
-      - run: sudo ip address add dev wg0 10.13.13.2 peer 10.13.13.1
-
-      - run: sudo wg set wg0 listen-port ${{ vars.PORT }} private-key ./privatekey peer ${{ vars.PUBLIC_CERT }} allowed-ips ${{ vars.ALLOWED_IPS }} endpoint ${{ secrets.ENDPOINT }}
-
-      - run: sudo ip link set up dev wg0
-
-      - run: curl ifconfig.me
-
-      - run: sudo ip link
-
-      - run: sudo wg
-
-      - run: sudo wg showconf wg0
