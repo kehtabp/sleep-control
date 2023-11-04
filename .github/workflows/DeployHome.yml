@@ -24,7 +24,8 @@ jobs:
       - name: export vars
         run: | 
           echo "export IDLE_COUNT_FILE=${{ vars.IDLE_COUNT_FILE }}" > ${{ vars.ENV_PATH }}
-          echo "export INHIBIT_URL=${{ vars.INHIBIT_URL }}" >> ${{ vars.ENV_PATH }}
+          echo "export INHIBIT=${{ vars.INHIBIT_URL }}" >> ${{ vars.ENV_PATH }}
+          echo "export DELAY=${{ vars.DELAY }}" >> ${{ vars.ENV_PATH }}
           echo "export PING_DOMAIN=${{ vars.PING_DOMAIN }}" >> ${{ vars.ENV_PATH }}
           echo "export PLEX_URL=${{ secrets.PLEX_URL }}" >> ${{ vars.ENV_PATH }}
           echo "export QB_URL=${{ secrets.QB_URL }}" >> ${{ vars.ENV_PATH }}
