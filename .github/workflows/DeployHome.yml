@@ -29,6 +29,7 @@ jobs:
           echo "export PING_DOMAIN=${{ vars.PING_DOMAIN }}" >> ${{ vars.ENV_PATH }}
           echo "export PLEX_URL=${{ secrets.PLEX_URL }}" >> ${{ vars.ENV_PATH }}
           echo "export QB_URL=${{ secrets.QB_URL }}" >> ${{ vars.ENV_PATH }}
+          echo "export QB_PORT=${{ secrets.QB_PORT }}" >> ${{ vars.ENV_PATH }}
 
       - name: Checkout
         uses: actions/checkout@v3
