@@ -38,7 +38,7 @@ check_user_session() {
 }
 
 check_inhibit_flag() {
-	if (( $INHIBIT == 1 )); then
+	if (( "$INHIBIT" == 1 )); then
 		printf 'Sleep inhibited by the flag\n' | logger -t standby-monitor -s
 		rm "$IDLE_COUNT_FILE" 2> /dev/null || true
 		# exit 0
