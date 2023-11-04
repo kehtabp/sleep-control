@@ -21,10 +21,10 @@ jobs:
     steps:
       - name: export vars
         run: | 
-          export IDLE_COUNT_FILE=${{ IDLE_COUNT_FILE }}
-          export INHIBIT_URL=${{ INHIBIT_URL }}
-          export PING_DOMAIN=${{ PING_DOMAIN }}
-          export PLEX_URL=${{ PLEX_URL }}
+          export IDLE_COUNT_FILE=${{ IDLE_COUNT_FILE }} > ${{ ENV_PATH }}
+          export INHIBIT_URL=${{ INHIBIT_URL }} > ${{ ENV_PATH }}
+          export PING_DOMAIN=${{ PING_DOMAIN }} > ${{ ENV_PATH }}
+          export PLEX_URL=${{ PLEX_URL }} > ${{ ENV_PATH }}
       - name: Checkout
         uses: actions/checkout@v2
         with:
