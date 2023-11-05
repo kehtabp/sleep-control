@@ -2,7 +2,7 @@
 Description=Run script after wake or boot
 
 [Service]
-ExecStart={{SCRIPT_PATH}}
+ExecStart=__SCRIPT_PATH__
 
 [Install]
 WantedBy=sleep.target multi-user.target

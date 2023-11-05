@@ -23,7 +23,6 @@ jobs:
         run: mkdir -p ${{ vars.DESTINATION }}
       - name: export vars 
         run: | 
-          echo "export IDLE_COUNT_FILE=${{ vars.IDLE_COUNT_FILE }}" > ${{ vars.ENV_PATH }}
           echo "export INHIBIT=${{ vars.INHIBIT }}" >> ${{ vars.ENV_PATH }}
           echo "export DELAY=${{ vars.DELAY }}" >> ${{ vars.ENV_PATH }}
           echo "export PING_DOMAIN=${{ vars.PING_DOMAIN }}" >> ${{ vars.ENV_PATH }}
@@ -37,6 +36,6 @@ jobs:
         run: cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}
       - name: Parameterize service file
         run: |
-          sed 's/\{{SCRIPT_PATH}}/${{ vars.DESTINATION }}\/standby-monitor.sh/g' ./standby-monitor.service > /etc/systemd/system/standby-monitor.sh
+          sed 's/__SCRIPT_PATH__/${{ vars.DESTINATION }}\/standby-monitor.sh/g' ./standby-monitor.service > /etc/systemd/system/standby-monitor.sh
       - name: Enable service
         run: systemctl enable standby-monitor.service
