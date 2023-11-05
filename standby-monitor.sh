@@ -97,7 +97,7 @@ check_idle() {
 }
 
 # Sleep for the specified delay
-sleep # $((DELAY * 60))
+sleep $((DELAY * 60))
 check_ping
 check_vpn
 check_user_session
