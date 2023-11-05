@@ -11,7 +11,6 @@ script_dir=$(dirname $script_path)
 source "$script_dir/.env"
 rerun() {
 	echo "Re-running" | logger -t $script_filename -s
-	# rm "$IDLE_COUNT_FILE" 2> /dev/null || true
     "$script_path" &
 	exit 0
 }
@@ -71,17 +70,8 @@ check_downloads() {
 	fi
 }
 
-check_idle() {
-	if [ -f "$IDLE_COUNT_FILE" ]; then
-        idle_count=$(cat "$IDLE_COUNT_FILE")
-    else
-        idle_count=0
-    fi
-	idle_count=$((idle_count + 1))
-	printf 'Been idle %d times' "$idle_count" | logger -t $script_filename -s
-	echo "$idle_count" > "$IDLE_COUNT_FILE"
-	printf 'Sleeping' | logger -t $script_filename -s
-	# rm "$IDLE_COUNT_FILE"
+sleep() {
+
 	if [ -f /sys/class/rtc/rtc0/wakealarm ]; then
 		local wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm)
 		if [ -n "$wakealarm" ]; then
@@ -104,4 +94,4 @@ check_user_session
 check_inhibit_flag
 check_plex_activity
 check_downloads
-check_idle
+sleep
