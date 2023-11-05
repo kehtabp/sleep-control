@@ -1,8 +1,8 @@
 [Unit]
-Description=Run script after wake
+Description=Run script after wake or boot
 
 [Service]
 ExecStart={{SCRIPT_PATH}}
 
 [Install]
-WantedBy=sleep.target
+WantedBy=sleep.target multi-user.target
