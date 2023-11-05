@@ -1,4 +1,8 @@
 #!/bin/bash
+
+
+
+
 set -euo pipefail
 script_filename=$(basename "${BASH_SOURCE[0]}")
 script_path=$(realpath "${BASH_SOURCE[0]}")
@@ -7,10 +11,18 @@ script_dir=$(dirname $script_path)
 # echo $script_filename
 # echo $script_path
 # echo $script_dir
+LOCKFILE= /dev/shm/${script_filename}.lock
 
+if [ -e "${LOCKFILE}" ]; then
+	printf 'Another instance of the script is running' | logger -t $script_filename -s
+	exit 1
+else
+	touch "${LOCKFILE}"
+fi
 source "$script_dir/.env"
 rerun() {
 	echo "Re-running" | logger -t $script_filename -s
+	rm "${LOCKFILE}"
     "$script_path" &
 	exit 0
 }
@@ -70,7 +82,7 @@ check_downloads() {
 	fi
 }
 
-sleep() {
+sleep_and_wake() {
 
 	if [ -f /sys/class/rtc/rtc0/wakealarm ]; then
 		local wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm)
@@ -83,9 +95,8 @@ sleep() {
 		printf 'Cannot access the wakealarm file' | logger -t $script_filename -s -p user.err
 	fi
 	/usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date) +1 hour")"
+	rm "${LOCKFILE}"
 	pm-suspend
-	sleep 5
-    "$script_path" &
 }
 
 # Sleep for the specified delay
@@ -97,4 +108,4 @@ check_user_session
 check_inhibit_flag
 check_plex_activity
 check_downloads
-sleep
+sleep_and_wake
