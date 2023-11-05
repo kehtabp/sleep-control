@@ -20,6 +20,11 @@ else
 	touch "${LOCKFILE}"
 fi
 source "$script_dir/.env"
+sigterm_received() {
+    rm "${LOCKFILE}"
+    exit 0
+}
+trap sigterm_received SIGKILL SIGTERM SIGINT
 rerun() {
 	echo "Re-running" | logger -t $script_filename -s
 	rm "${LOCKFILE}"
