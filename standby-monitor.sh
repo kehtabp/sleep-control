@@ -106,7 +106,7 @@ sleep_and_wake() {
 
 # Sleep for the specified delay
 echo "Started... Sleeping for $DELAY minutes." | logger -t $script_filename -s
-sleep $((DELAY * 60))
+sleep $DELAY
 check_ping
 check_vpn
 check_user_session
