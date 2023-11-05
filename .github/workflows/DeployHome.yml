@@ -37,6 +37,6 @@ jobs:
       - name: Parameterize service file
         run: sed 's#__SCRIPT_PATH__#${{ vars.DESTINATION }}/standby-monitor.sh#g' ./standby-monitor.service
       - name: Copy service file
-        run: sudo cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
+        run: cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
       - name: Enable service
-        run: sudo systemctl enable standby-monitor.service
+        run: systemctl enable standby-monitor.service
