@@ -11,7 +11,7 @@ script_dir=$(dirname $script_path)
 # echo $script_filename
 # echo $script_path
 # echo $script_dir
-LOCKFILE= /dev/shm/${script_filename}.lock
+LOCKFILE=/dev/shm/${script_filename}.lock
 
 if [ -e "${LOCKFILE}" ]; then
 	printf 'Another instance of the script is running' | logger -t $script_filename -s
