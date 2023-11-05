@@ -89,6 +89,7 @@ sleep() {
 }
 
 # Sleep for the specified delay
+echo "Started... Sleeping for $DELAY seconds." | logger -t $script_filename -s
 sleep $((DELAY * 60))
 check_ping
 check_vpn
