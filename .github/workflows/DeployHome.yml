@@ -39,4 +39,4 @@ jobs:
       - name: Copy service file
         run: echo ${{ secrets.SUDO_PASS }} | sudo -S cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
       - name: Enable service
-        run: systemctl enable standby-monitor.service
+        run: sudo systemctl enable standby-monitor.service
