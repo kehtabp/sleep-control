@@ -41,3 +41,4 @@ jobs:
           echo ${{ secrets.SUDO_PASS }} | sudo -S cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
           sudo systemctl unmask standby-monitor.service
           sudo systemctl enable standby-monitor.service
+          sudo systemctl start standby-monitor.service
