@@ -11,7 +11,7 @@ script_dir=$(dirname $script_path)
 source "$script_dir/.env"
 rerun() {
 	echo "Re-running" | logger -t $script_filename -s
-	rm "$IDLE_COUNT_FILE" 2> /dev/null || true
+	# rm "$IDLE_COUNT_FILE" 2> /dev/null || true
     "$script_path" &
 	exit 0
 }
@@ -20,10 +20,10 @@ check_ping() {
 	if ! ping -c2 "$PING_DOMAIN" &> /dev/null; then
 		local last_reboot=$(cat /tmp/lastReboot)
 		local reboot_delta=$(( $(date +%s) - last_reboot ))
-		printf 'Failed to ping %s. Last reboot was %d sec ago.\n' "$PING_DOMAIN" "$reboot_delta" | logger -t $script_filename -s
+		printf 'Failed to ping %s. Last reboot was %d sec ago.' "$PING_DOMAIN" "$reboot_delta" | logger -t $script_filename -s
 		if (( reboot_delta > 10800 )); then
 			date +%s > /tmp/lastReboot
-			printf 'Rebooting\n' | logger -t $script_filename -s
+			printf 'Rebooting' | logger -t $script_filename -s
 			reboot
 		fi
 	fi
@@ -35,7 +35,7 @@ check_vpn() {
 		# echo "Last shake : $last_shake"
 		diff=$(( $(date +%s) - last_shake ))
 		if (( diff < 600 )); then
-			printf 'Sleep inhibited by an active VPN session %d seconds ago\n' "$diff" | logger -t $script_filename -s
+			printf 'Sleep inhibited by an active VPN session %d seconds ago' "$diff" | logger -t $script_filename -s
 			rerun
 		fi
 	done
@@ -43,14 +43,14 @@ check_vpn() {
 
 check_user_session() {
 	if [[ `who | wc -l` -gt 0 ]]; then
-		printf 'Sleep inhibited by an active user session\n' | logger -t $script_filename -s		
+		printf 'Sleep inhibited by an active user session' | logger -t $script_filename -s		
 		rerun
 	fi
 }
 
 check_inhibit_flag() {
 	if (( "$INHIBIT" == 1 )); then
-		printf 'Sleep inhibited by the flag\n' | logger -t $script_filename -s	
+		printf 'Sleep inhibited by the flag' | logger -t $script_filename -s	
 		rerun
 	fi
 }
@@ -58,15 +58,15 @@ check_inhibit_flag() {
 check_plex_activity() {
 	local res=`curl -s "$PLEX_URL" | grep "MediaContainer size=\"0\"" | wc -l`
 	if ! (( res )); then
-		printf 'Sleep inhibited by Plex activity\n' | logger -t $script_filename -s
+		printf 'Sleep inhibited by Plex activity' | logger -t $script_filename -s
 		rerun
 	fi
 }
 
-check_qbittorrent_downloads() {
+check_downloads() {
 	total_download_speed=$(curl -sf "http://${QB_URL}:${QB_PORT}/api/v2/transfer/info" | jq -r '.dl_info_speed')
 	if (( total_download_speed > 500000 )); then
-		printf 'Sleep inhibited by active downloads in qBittorrent with download speed more than 500kb/s\n' | logger -t $script_filename -s
+		printf 'Sleep inhibited by active downloads with download speed more than 500kb/s' | logger -t $script_filename -s
 		rerun
 	fi
 }
@@ -78,30 +78,30 @@ check_idle() {
         idle_count=0
     fi
 	idle_count=$((idle_count + 1))
-	printf 'Been idle %d times\n' "$idle_count" | logger -t $script_filename -s
+	printf 'Been idle %d times' "$idle_count" | logger -t $script_filename -s
 	echo "$idle_count" > "$IDLE_COUNT_FILE"
-	printf 'Sleeping\n' | logger -t $script_filename -s
-	rm "$IDLE_COUNT_FILE"
+	printf 'Sleeping' | logger -t $script_filename -s
+	# rm "$IDLE_COUNT_FILE"
 	if [ -f /sys/class/rtc/rtc0/wakealarm ]; then
 		local wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm)
 		if [ -n "$wakealarm" ]; then
-			printf 'Next wakeup is scheduled for %s\n' "$(date -d "@$wakealarm")" | logger -t $script_filename -s
+			printf 'Next wakeup is scheduled for %s' "$(date -d "@$wakealarm")" | logger -t $script_filename -s
 		else
 			/usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date +\%D -d '3 hours ago') +1 day 2 hours 59 minutes")"
 		fi
 	else
-		printf 'Cannot access the wakealarm file\n' | logger -t $script_filename -s -p user.err
+		printf 'Cannot access the wakealarm file' | logger -t $script_filename -s -p user.err
 	fi
 	/usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date) +1 hour")"
 	pm-suspend
 }
 
 # Sleep for the specified delay
-sleep $((DELAY * 60))
+sleep 3 #$((DELAY * 60))
 check_ping
 check_vpn
 check_user_session
 check_inhibit_flag
 check_plex_activity
-check_qbittorrent_downloads
+check_downloads
 check_idle
