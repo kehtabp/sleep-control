@@ -35,8 +35,9 @@ jobs:
       - name: Copy 
         run: cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}
       - name: Parameterize service file
-        run: sed 's#__SCRIPT_PATH__#${{ vars.DESTINATION }}/standby-monitor.sh#g' ./standby-monitor.service > ./standby-monitor.service
-      - name: Copy service file
-        run: echo ${{ secrets.SUDO_PASS }} | sudo -S cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
-      - name: Enable service
-        run: echo ${{ secrets.SUDO_PASS }} | sudo -S systemctl enable standby-monitor.service
+        run: sed 's#__SCRIPT_PATH__#${{ vars.DESTINATION }}/standby-monitor.sh#g' ./standby-monitor.template.service > ./standby-monitor.service
+      - name: Copy and enable service file
+        run: | 
+          echo ${{ secrets.SUDO_PASS }} | sudo -S cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
+          sudo systemctl unmask standby-monitor.service
+          sudo systemctl enable standby-monitor.service
