@@ -38,5 +38,5 @@ jobs:
         run: sed 's#__SCRIPT_PATH__#${{ vars.DESTINATION }}/standby-monitor.sh#g' ./standby-monitor.service > ./standby-monitor.service
       - name: Copy service file
         run: echo ${{ secrets.SUDO_PASS }} | sudo cp ./standby-monitor.service /etc/systemd/system/standby-monitor.service
-        - name: Enable service
+      - name: Enable service
         run: systemctl enable standby-monitor.service
