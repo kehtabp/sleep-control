@@ -35,3 +35,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Copy 
         run: cp ${{ github.workspace }}/standby-monitor.sh ${{ vars.DESTINATION }}
+      - name: Parameterize service file
+        run: |
+          sed 's/\{{SCRIPT_PATH}}/${{ vars.DESTINATION }}\/standby-monitor.sh/g' ./standby-monitor.service > ${{ vars.DESTINATION }}\/standby-monitor.sh

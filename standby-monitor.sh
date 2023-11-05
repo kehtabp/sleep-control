@@ -84,10 +84,12 @@ sleep() {
 	fi
 	/usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date) +1 hour")"
 	pm-suspend
+	sleep 5
+    "$script_path" &
 }
 
 # Sleep for the specified delay
-sleep 3 #$((DELAY * 60))
+sleep $((DELAY * 60))
 check_ping
 check_vpn
 check_user_session

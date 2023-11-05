@@ -2,7 +2,7 @@
 Description=Run script after wake
 
 [Service]
-ExecStart=/path/to/your/script.sh
+ExecStart={{SCRIPT_PATH}}
 
 [Install]
 WantedBy=sleep.target
