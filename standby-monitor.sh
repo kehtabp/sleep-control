@@ -6,6 +6,8 @@ script_filename=$(basename "${BASH_SOURCE[0]}")
 script_path=$(realpath "${BASH_SOURCE[0]}")
 script_dir=$(dirname $script_path)
 
+suorce $script_dir/.env
+
 # echo $script_filename
 # echo $script_path
 # echo $script_dir
