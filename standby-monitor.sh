@@ -10,6 +10,7 @@ script_dir=$(dirname $script_path)
 
 source $script_dir/.env
 
+LOCKFILE=/dev/shm/${script_filename}.lock
 
 dont_sleep() {
     echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
@@ -20,7 +21,6 @@ dont_sleep() {
 trap dont_sleep SIGKILL SIGTERM SIGINT
 
 # Check if another instance of the script is running
-LOCKFILE=/dev/shm/${script_filename}.lock
 
 if [ -e "${LOCKFILE}" ]; then
     printf 'Another instance of the script is running. Killing it.' | logger -t $script_filename
