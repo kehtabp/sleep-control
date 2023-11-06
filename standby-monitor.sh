@@ -22,7 +22,7 @@ else
 fi
 
 dont_sleep() {
-	# echo "Re-running" | logger -t $script_filename
+	echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
 	rm "${LOCKFILE}"
     # "$script_path" &
 	exit 0
