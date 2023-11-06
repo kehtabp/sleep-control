@@ -1,9 +1,7 @@
 #!/bin/bash
 
-
-
-
 set -euo pipefail
+
 script_filename=$(basename "${BASH_SOURCE[0]}")
 script_path=$(realpath "${BASH_SOURCE[0]}")
 script_dir=$(dirname $script_path)
@@ -19,18 +17,15 @@ if [ -e "${LOCKFILE}" ]; then
 else
 	touch "${LOCKFILE}"
 fi
-source "$script_dir/.env"
-sigterm_received() {
-    rm "${LOCKFILE}"
-    exit 0
-}
-trap sigterm_received SIGKILL SIGTERM SIGINT
-rerun() {
-	echo "Re-running" | logger -t $script_filename -s
+
+dont_sleep() {
+	# echo "Re-running" | logger -t $script_filename -s
 	rm "${LOCKFILE}"
-    "$script_path" &
+    # "$script_path" &
 	exit 0
 }
+
+trap dont_sleep SIGKILL SIGTERM SIGINT
 
 check_ping() {
 	if ! ping -c2 "$PING_DOMAIN" &> /dev/null; then
@@ -52,7 +47,7 @@ check_vpn() {
 		diff=$(( $(date +%s) - last_shake ))
 		if (( diff < 600 )); then
 			printf 'Sleep inhibited by an active VPN session %d seconds ago' "$diff" | logger -t $script_filename -s
-			rerun
+			dont_sleep
 		fi
 	done
 }
@@ -60,14 +55,14 @@ check_vpn() {
 check_user_session() {
 	if [[ `who | wc -l` -gt 0 ]]; then
 		printf 'Sleep inhibited by an active user session' | logger -t $script_filename -s		
-		rerun
+		dont_sleep
 	fi
 }
 
 check_inhibit_flag() {
 	if (( "$INHIBIT" == 1 )); then
 		printf 'Sleep inhibited by the flag' | logger -t $script_filename -s	
-		rerun
+		dont_sleep
 	fi
 }
 
@@ -75,7 +70,7 @@ check_plex_activity() {
 	local res=`curl -s "$PLEX_URL" | grep "MediaContainer size=\"0\"" | wc -l`
 	if ! (( res )); then
 		printf 'Sleep inhibited by Plex activity' | logger -t $script_filename -s
-		rerun
+		dont_sleep
 	fi
 }
 
@@ -83,7 +78,7 @@ check_downloads() {
 	total_download_speed=$(curl -sf "http://${QB_URL}:${QB_PORT}/api/v2/transfer/info" | jq -r '.dl_info_speed')
 	if (( total_download_speed > 500000 )); then
 		printf 'Sleep inhibited by active downloads with download speed more than 500kb/s' | logger -t $script_filename -s
-		rerun
+		dont_sleep
 	fi
 }
 
@@ -105,7 +100,7 @@ sleep_and_wake() {
 }
 
 # Sleep for the specified delay
-echo "Started... Sleeping for $DELAY minutes." | logger -t $script_filename -s
+echo "Started... Sleeping for $DELAY seconds." | logger -t $script_filename -s
 sleep $DELAY
 check_ping
 check_vpn
