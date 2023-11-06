@@ -12,9 +12,9 @@ script_dir=$(dirname $script_path)
 LOCKFILE=/dev/shm/${script_filename}.lock
 
 if [ -e "${LOCKFILE}" ]; then
-	printf 'Another instance of the script is running. KIlling it.' | logger -t $script_filename
+	printf 'Another instance of the script is running. Killing it.' | logger -t $script_filename
 	killall -q -TERM "${script_filename}"
-	exit 1
+	exit 0
 else
 	touch "${LOCKFILE}"
 fi
