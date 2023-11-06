@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -euo pipefail
 
 
@@ -14,7 +13,7 @@ LOCKFILE=/dev/shm/${script_filename}.lock
 
 dont_sleep() {
     echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
-    rm "${LOCKFILE}"
+    sudo rm "${LOCKFILE}"
     # "$script_path" &
     exit 0
 }
