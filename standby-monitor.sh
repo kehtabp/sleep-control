@@ -13,7 +13,7 @@ LOCKFILE=/dev/shm/${script_filename}.lock
 
 wrapup() {
     echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
-    sudo rm "${LOCKFILE}"
+    rm "${LOCKFILE}"
     # "$script_path" &
     exit 0
 }
