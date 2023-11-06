@@ -1,11 +1,15 @@
 #!/bin/bash
-source $script_dir/.env
 
 set -euo pipefail
 
+
+### INITIALIZATION ###
 script_filename=$(basename "${BASH_SOURCE[0]}")
 script_path=$(realpath "${BASH_SOURCE[0]}")
 script_dir=$(dirname $script_path)
+
+source $script_dir/.env
+
 
 dont_sleep() {
     echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
@@ -15,9 +19,7 @@ dont_sleep() {
 }
 trap dont_sleep SIGKILL SIGTERM SIGINT
 
-# echo $script_filename
-# echo $script_path
-# echo $script_dir
+# Check if another instance of the script is running
 LOCKFILE=/dev/shm/${script_filename}.lock
 
 if [ -e "${LOCKFILE}" ]; then
@@ -27,8 +29,6 @@ if [ -e "${LOCKFILE}" ]; then
 else
     touch "${LOCKFILE}"
 fi
-
-
 
 
 check_ping() {
