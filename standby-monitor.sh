@@ -14,7 +14,7 @@ LOCKFILE=/dev/shm/${script_filename}.lock
 if [ -e "${LOCKFILE}" ]; then
 	printf 'Another instance of the script is running. Killing it.' | logger -t $script_filename
 	killall -q -TERM "${script_filename}"
-	exit 0
+	dont_sleep
 else
 	touch "${LOCKFILE}"
 fi
