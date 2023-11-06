@@ -41,6 +41,7 @@ check_ping() {
 			reboot
 		fi
 	fi
+	printf "Ping $DOMAIN successful" | logger -t $script_filename
 }
 
 check_vpn() {
@@ -86,7 +87,6 @@ check_downloads() {
 }
 
 sleep_and_wake() {
-
 	if [ -f /sys/class/rtc/rtc0/wakealarm ]; then
 		local wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm)
 		if [ -n "$wakealarm" ]; then
@@ -103,9 +103,9 @@ sleep_and_wake() {
 }
 
 # Sleep for the specified delay
-echo "Started... Sleeping for $DELAY seconds." | logger -t $script_filename
-sleep $DELAY
 check_ping
+echo "Waiting for $DELAY seconds before excuting checks." | logger -t $script_filename
+sleep $DELAY
 check_vpn
 check_user_session
 check_inhibit_flag
