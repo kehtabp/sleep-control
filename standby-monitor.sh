@@ -18,7 +18,7 @@ wrapup() {
     exit 0
 }
 
-# Trap SIGINT, SIGTERM and SIGKILL
+# Trap SIGINT, SIGTERM and SIGKILL 
 trap wrapup SIGKILL SIGTERM SIGINT
 
 # Check if another instance of the script is running
