@@ -18,6 +18,8 @@ dont_sleep() {
     # "$script_path" &
     exit 0
 }
+
+# Trap SIGINT, SIGTERM and SIGKILL
 trap dont_sleep SIGKILL SIGTERM SIGINT
 
 # Check if another instance of the script is running
