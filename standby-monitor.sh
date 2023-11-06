@@ -11,7 +11,7 @@ source $script_dir/.env
 
 LOCKFILE=/dev/shm/${script_filename}.lock
 
-dont_sleep() {
+wrapup() {
     echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
     sudo rm "${LOCKFILE}"
     # "$script_path" &
@@ -19,14 +19,14 @@ dont_sleep() {
 }
 
 # Trap SIGINT, SIGTERM and SIGKILL
-trap dont_sleep SIGKILL SIGTERM SIGINT
+trap wrapup SIGKILL SIGTERM SIGINT
 
 # Check if another instance of the script is running
 
 if [ -e "${LOCKFILE}" ]; then
     printf 'Another instance of the script is running. Killing it.' | logger -t $script_filename
     killall "${script_filename}"
-    dont_sleep
+    wrapup
 else
     touch "${LOCKFILE}"
 fi
@@ -43,7 +43,7 @@ check_ping() {
             reboot
         fi
     fi
-    printf "Ping $DOMAIN successful" | logger -t $script_filename
+    printf "Ping $PING_DOMAIN successful" | logger -t $script_filename
 }
 
 check_vpn() {
@@ -53,7 +53,7 @@ check_vpn() {
         diff=$(( $(date +%s) - last_shake ))
         if (( diff < 600 )); then
             printf 'Sleep inhibited by an active VPN session %d seconds ago' "$diff" | logger -t $script_filename
-            dont_sleep
+            wrapup
         fi
     done
 }
@@ -61,14 +61,14 @@ check_vpn() {
 check_user_session() {
     if [[ `who | wc -l` -gt 0 ]]; then
         printf 'Sleep inhibited by an active user session' | logger -t $script_filename
-        dont_sleep
+        wrapup
     fi
 }
 
 check_inhibit_flag() {
     if (( "$INHIBIT" == 1 )); then
         printf 'Sleep inhibited by the flag' | logger -t $script_filename
-        dont_sleep
+        wrapup
     fi
 }
 
@@ -76,7 +76,7 @@ check_plex_activity() {
     local res=`curl -s "$PLEX_URL" | grep "MediaContainer size=\"0\"" | wc -l`
     if ! (( res )); then
         printf 'Sleep inhibited by Plex activity' | logger -t $script_filename
-        dont_sleep
+        wrapup
     fi
 }
 
@@ -84,7 +84,7 @@ check_downloads() {
     total_download_speed=$(curl -sf "http://${QB_URL}:${QB_PORT}/api/v2/transfer/info" | jq -r '.dl_info_speed')
     if (( total_download_speed > 500000 )); then
         printf 'Sleep inhibited by active downloads with download speed more than 500kb/s' | logger -t $script_filename
-        dont_sleep
+        wrapup
     fi
 }
 
