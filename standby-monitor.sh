@@ -89,7 +89,7 @@ check_downloads() {
 }
 
 sleep_and_wake() {
-    printf 'Initiating sleep seq'
+    printf 'Initiating sleep seq' | logger -t $script_filename
     if [ -f /sys/class/rtc/rtc0/wakealarm ]; then
         local wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm)
         if [ -n "$wakealarm" ]; then
