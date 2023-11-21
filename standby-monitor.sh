@@ -14,7 +14,6 @@ LOCKFILE=/dev/shm/${script_filename}.lock
 wrapup() {
     echo "Finished. Removing $LOCKFILE" | logger -t $script_filename
     rm "${LOCKFILE}"
-    # "$script_path" &
     exit 0
 }
 
@@ -61,7 +60,7 @@ check_vpn() {
 check_user_session() {
     if [[ `who | wc -l` -gt 0 ]]; then
         printf 'Sleep inhibited by an active user session' | logger -t $script_filename
-        # wrapup
+        wrapup
     fi
 }
 
@@ -103,7 +102,7 @@ sleep_and_wake() {
     printf 'Sleeping' | logger -t $script_filename
     /usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date) +1 hour")"
     rm "${LOCKFILE}"
-    #pm-suspend
+    pm-suspend
 }
 
 # Sleep for the specified delay
