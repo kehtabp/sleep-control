@@ -101,7 +101,7 @@ sleep_and_wake() {
     fi
     /usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date) +1 hour")"
     rm "${LOCKFILE}"
-    pm-suspend
+    #pm-suspend
 }
 
 # Sleep for the specified delay
