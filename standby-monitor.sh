@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -euo pipefail
+set -euo pipefail
 
 
 ### INITIALIZATION ###
@@ -89,6 +89,7 @@ check_downloads() {
 }
 
 sleep_and_wake() {
+    printf 'Initiating sleep seq'
     if [ -f /sys/class/rtc/rtc0/wakealarm ]; then
         local wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm)
         if [ -n "$wakealarm" ]; then
