@@ -100,6 +100,7 @@ sleep_and_wake() {
     else
         printf 'Cannot access the wakealarm file' | logger -t $script_filename -p user.err
     fi
+    printf 'Sleeping' | logger -t $script_filename
     /usr/sbin/rtcwake -m no -u -t "$(date +\%s -d "$(date) +1 hour")"
     rm "${LOCKFILE}"
     #pm-suspend
