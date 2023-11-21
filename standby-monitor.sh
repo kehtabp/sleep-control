@@ -61,7 +61,7 @@ check_vpn() {
 check_user_session() {
     if [[ `who | wc -l` -gt 0 ]]; then
         printf 'Sleep inhibited by an active user session' | logger -t $script_filename
-        wrapup
+        # wrapup
     fi
 }
 
