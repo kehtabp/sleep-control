@@ -106,6 +106,7 @@ sleep_and_wake() {
 }
 
 # Sleep for the specified delay
+sleep 15
 check_ping
 echo "Waiting for $DELAY seconds before excuting checks." | logger -t $script_filename
 sleep $DELAY
